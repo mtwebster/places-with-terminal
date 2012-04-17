@@ -20,10 +20,12 @@ MyPopupMenuItem.prototype =
 		_init: function(icon, text, params)
 		{
 			PopupMenu.PopupBaseMenuItem.prototype._init.call(this, params);
+                        let shell_icon = new St.Icon({icon_name: "bash", icon_size: ICON_SIZE, icon_type: St.IconType.FULLCOLOR});
 			this.icon = icon;
 			this.addActor(this.icon);
 			this.label = new St.Label({ text: text });
 			this.addActor(this.label);
+                        this.addActor(shell_icon);
 		}
 };
 
