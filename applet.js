@@ -14,6 +14,17 @@ let ICON_SIZE = 22;
 
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 
+function ok_Terminal(id)
+{
+    if (!id) {
+        return false;
+    } else if ((id == 'special:connect') || id.contains('ftp')) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function MyPopupMenuItem()
 {
 	this._init.apply(this, arguments);
@@ -24,37 +35,37 @@ MyPopupMenuItem.prototype =
 		__proto__: PopupMenu.PopupBaseMenuItem.prototype,
 		_init: function(icon, text, loc, params)
 		{
+		    let term_icon = new St.Icon({icon_name: "terminal", icon_size: 16, icon_type: St.IconType.FULLCOLOR});
 			PopupMenu.PopupBaseMenuItem.prototype._init.call(this, params);
 			this.icon = icon;
-                        this.loc = loc;
+            this.loc = loc;
 			this.addActor(this.icon);
-                        this.labeltext = text;
+            this.labeltext = text;
 			this.label = new St.Label({ text: text });
 			this.addActor(this.label);
+			if (ok_Terminal(this.loc)) {
+			    this.addActor(term_icon);
+			}
 		},
 
-                _onButtonReleaseEvent: function (actor, event)
-                {
-                        if ( Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON1_MASK ) {
-                            this.activate(event);
-                        } else if (Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON3_MASK) {
-                            if (this.loc) {
-                                if (this.loc == "special:home") {
-                                    this.loc = Gio.file_new_for_path(GLib.get_home_dir()).get_uri().replace('file://','');
-                                } else if (this.loc == "special:desktop") {
-                                    this.loc = Gio.file_new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)).get_uri().replace('file://','');
-                                } else if (this.loc == "root") {
-                                    this.loc = "/";
-                                } else if (this.loc == "special:connect") {
-                                    return true;
-                                } else if (this.loc.contains('ftp')) {
-                                    return true;
-                                }
-                                Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
-                            }
-                        }
-                        return true;
+        _onButtonReleaseEvent: function (actor, event)
+        {
+            if ( Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON1_MASK ) {
+                this.activate(event);
+            } else if (Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON3_MASK) {
+                if (ok_Terminal(this.loc)) {
+                    if (this.loc == "special:home") {
+                        this.loc = Gio.file_new_for_path(GLib.get_home_dir()).get_uri().replace('file://','');
+                    } else if (this.loc == "special:desktop") {
+                        this.loc = Gio.file_new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)).get_uri().replace('file://','');
+                    } else if (this.loc == "root") {
+                        this.loc = "/";
+                    } 
+                    Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
                 }
+            }
+            return true;
+        }
 };
 
 function MyMenu(launcher, orientation) {
