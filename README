@@ -1,9 +1,16 @@
-This is a Cinnamon applet, which lets you access your places and bookmarks through an icon in the cinnamon panel.
+This is a Cinnamon applet, which lets you access your places and bookmarks through an icon in the cinnamon panel, as well as launch a terminal in those locations.
 
+Left-clicking the item will open the corresponding folder for that item.
+Right-clicking the item will launch gnome-terminal starting in that item's location.
 
 Installation
 ================
 	
-	1) Copy the folder "places-bookmarks@dmo60.de" to "~/.local/share/cinnamon/applets/".
+	1) Copy the folder "places-with-terminal@mtwebster" to "~/.local/share/cinnamon/applets/".
 	
-	2) Enable the applet in cinnamon settings. (Eventually you have to restart cinnamon: Press Alt+F2, type 'r' and enter)
+	2) Enable the applet in cinnamon settings.
+
+
+
+
+This is a heavily modified version of the applet 'places-bookmarks@dmo60.de' - I've merely added the ability to launch a terminal.

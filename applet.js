@@ -12,6 +12,7 @@ const _ = Gettext.gettext;
 
 let ICON_SIZE = 22;
 
+String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 
 function MyPopupMenuItem()
 {
@@ -46,6 +47,8 @@ MyPopupMenuItem.prototype =
                                     this.loc = "/";
                                 } else if (this.loc == "special:connect") {
                                     return true;
+                                } else if (this.loc.contains('ftp')) {
+                                    return true;
                                 }
                                 Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
                             }
@@ -62,7 +65,7 @@ MyMenu.prototype = {
 		__proto__: PopupMenu.PopupMenu.prototype,
 
 		_init: function(launcher, orientation) {
-			this._launcher = launcher;        
+			this._launcher = launcher;
 
 			PopupMenu.PopupMenu.prototype._init.call(this, launcher.actor, 0.0, orientation, 0);
 			Main.uiGroup.add_actor(this.actor);
