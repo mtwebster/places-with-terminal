@@ -1,6 +1,6 @@
 {
-"uuid": "places-bookmarks@mtwebster",
-"name": "Places",
-"description": "Access your places and bookmarks",
+"uuid": "places-with-terminal@mtwebster",
+"name": "Places with Terminal Launcher",
+"description": "Access your places and bookmarks, or launch a terminal at that location with a right-click",
 "icon": "user-home"
 }

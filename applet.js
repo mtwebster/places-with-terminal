@@ -50,7 +50,6 @@ MyPopupMenuItem.prototype =
                                 Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
                             }
                         }
-                        this.menu.toggle();
                         return true;
                 }
 };
@@ -83,7 +82,7 @@ MyApplet.prototype = {
 
 			try {        
 				this.set_applet_icon_name("user-home");
-				this.set_applet_tooltip(_("Places and bookmarks"));
+				this.set_applet_tooltip(_("Places and bookmarks - right-click items for terminal"));
 
 				this.menuManager = new PopupMenu.PopupMenuManager(this);
 				this.menu = new MyMenu(this, orientation);
@@ -134,7 +133,7 @@ MyApplet.prototype = {
 			
 			this.menu.addMenuItem(this.filesystemItem);
 			this.filesystemItem.connect('activate', function(actor, event) {
-                            Main.Util.spawnCommandLine("/usr/bin/epmupdater -r root");
+                            Main.Util.spawnCommandLine("gksudo nautilus /");
 			});
 			
 			// Separator
