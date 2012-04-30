@@ -6,7 +6,7 @@ const Clutter = imports.gi.Clutter;
 const Cinnamon = imports.gi.Cinnamon;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
-
+const Lang = imports.lang;
 const Gettext = imports.gettext;
 const _ = Gettext.gettext;
 
@@ -44,27 +44,33 @@ MyPopupMenuItem.prototype =
 			this.label = new St.Label({ text: text });
 			this.addActor(this.label);
 			if (ok_Terminal(this.loc)) {
-			    this.addActor(term_icon);
+			    this.buttonbox = new St.BoxLayout();
+                button = new St.Button({ child: term_icon });
+                button.connect('clicked', Lang.bind(this, this._terminal));
+                this.buttonbox.add_actor(button);
+                this.addActor(this.buttonbox);            
 			}
-		},
+        },
 
         _onButtonReleaseEvent: function (actor, event)
         {
             if ( Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON1_MASK ) {
                 this.activate(event);
-            } else if (Cinnamon.get_event_state(event) & Clutter.ModifierType.BUTTON3_MASK) {
-                if (ok_Terminal(this.loc)) {
-                    if (this.loc == "special:home") {
-                        this.loc = Gio.file_new_for_path(GLib.get_home_dir()).get_uri().replace('file://','');
-                    } else if (this.loc == "special:desktop") {
-                        this.loc = Gio.file_new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)).get_uri().replace('file://','');
-                    } else if (this.loc == "root") {
-                        this.loc = "/";
-                    } 
-                    Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
-                }
             }
             return true;
+        },
+        
+        _terminal: function () {
+        
+            if (this.loc == "special:home") {
+                this.loc = Gio.file_new_for_path(GLib.get_home_dir()).get_uri().replace('file://','');
+            } else if (this.loc == "special:desktop") {
+                this.loc = Gio.file_new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)).get_uri().replace('file://','');
+            } else if (this.loc == "root") {
+                this.loc = "/";
+            } 
+            Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
+            this.close(true);
         }
 };
 
@@ -109,7 +115,7 @@ MyApplet.prototype = {
 			};
 		},
 
-		on_applet_clicked: function(event) {
+		on_applet_clicked: function(event) {    
 			this.menu.toggle();        
 		},
 
@@ -158,7 +164,7 @@ MyApplet.prototype = {
 			for ( bookmarkid; bookmarkid < this.bookmarks.length; bookmarkid++, placeid++) {
 				let icon = this.bookmarks[bookmarkid].iconFactory(ICON_SIZE);
 				this.placeItems[placeid] = new MyPopupMenuItem(icon, _(this.bookmarks[bookmarkid].name),
-                                    this.bookmarks[bookmarkid].id.replace('bookmark:file://',''));
+                        this.bookmarks[bookmarkid].id.replace('bookmark:file://',''));
 				this.placeItems[placeid].place = this.bookmarks[bookmarkid];
 				this.menu.addMenuItem(this.placeItems[placeid]);
 				this.placeItems[placeid].connect('activate', function(actor, event) {
