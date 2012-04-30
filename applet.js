@@ -101,7 +101,7 @@ MyApplet.prototype = {
 
 			try {        
 				this.set_applet_icon_name("user-home");
-				this.set_applet_tooltip(_("Places and bookmarks - right-click items for terminal"));
+				this.set_applet_tooltip(_("Places and bookmarks"));
 
 				this.menuManager = new PopupMenu.PopupMenuManager(this);
 				this.menu = new MyMenu(this, orientation);
