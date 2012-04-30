@@ -70,7 +70,6 @@ MyPopupMenuItem.prototype =
                 this.loc = "/";
             } 
             Main.Util.spawnCommandLine("gnome-terminal --working-directory="+this.loc);
-            this.close(true);
         }
 };
 
