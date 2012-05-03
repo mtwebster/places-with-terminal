@@ -11,6 +11,7 @@ const Gettext = imports.gettext;
 const _ = Gettext.gettext;
 
 let ICON_SIZE = 22;
+const PLACE_ICON = GLib.build_filenamev([global.userdatadir, 'applets/places-with-terminal@mtwebster/places_icon.svg']);
 
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 
@@ -99,8 +100,8 @@ MyApplet.prototype = {
 		_init: function(orientation) {
 			Applet.IconApplet.prototype._init.call(this, orientation);
 
-			try {        
-				this.set_applet_icon_name("user-home");
+			try {
+				this.set_applet_icon_symbolic_name('folder');
 				this.set_applet_tooltip(_("Places and bookmarks"));
 
 				this.menuManager = new PopupMenu.PopupMenuManager(this);
@@ -139,7 +140,7 @@ MyApplet.prototype = {
 			}
 			
 			// Display Computer / Filesystem
-			let icon = new St.Icon({icon_name: "computer", icon_size: ICON_SIZE, icon_type: St.IconType.FULLCOLOR});
+			let icon = new St.Icon({icon_name: "computer", icon_size: ICON_SIZE, icon_type: St.IconType.FULLCOLOR, style_class: 'popup-menu-icon'});
 			this.computerItem = new MyPopupMenuItem(icon, _("Computer"));
 			
 			this.menu.addMenuItem(this.computerItem);
@@ -147,7 +148,7 @@ MyApplet.prototype = {
                             Main.Util.spawnCommandLine("nautilus computer://");
 			});
 			
-			let icon = new St.Icon({icon_name: "harddrive", icon_size: ICON_SIZE, icon_type: St.IconType.FULLCOLOR});
+			let icon = new St.Icon({icon_name: "harddrive", icon_size: ICON_SIZE, icon_type: St.IconType.FULLCOLOR, style_class: 'popup-menu-icon'});
 			this.filesystemItem = new MyPopupMenuItem(icon, _("File System"), "root");
 			
 			this.menu.addMenuItem(this.filesystemItem);
