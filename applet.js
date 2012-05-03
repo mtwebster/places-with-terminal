@@ -9,9 +9,9 @@ const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Gettext = imports.gettext;
 const _ = Gettext.gettext;
+const Gtk = imports.gi.Gtk;
 
 let ICON_SIZE = 22;
-const PLACE_ICON = GLib.build_filenamev([global.userdatadir, 'applets/places-with-terminal@mtwebster/places_icon.svg']);
 
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 
@@ -109,11 +109,20 @@ MyApplet.prototype = {
 				this.menuManager.addMenu(this.menu);
 
 				this._display();
+                this.refresh_menu_item = new Applet.MenuItem(_("Refresh bookmarks..."), Gtk.STOCK_REFRESH,
+                        Lang.bind(this, this._refresh));
+                this._applet_context_menu.addMenuItem(this.refresh_menu_item);
 			}
 			catch (e) {
 				global.logError(e);
 			};
 		},
+
+        _refresh: function() {
+            this.menu.removeAll();
+            Main.placesManager._reloadBookmarks();
+            this._display();
+        },
 
 		on_applet_clicked: function(event) {    
 			this.menu.toggle();        
@@ -122,7 +131,6 @@ MyApplet.prototype = {
 		_display: function() {
 			let placeid = 0;
 			this.placeItems = [];
-
 			this.defaultPlaces = Main.placesManager.getDefaultPlaces();
 			this.bookmarks     = Main.placesManager.getBookmarks();
 
