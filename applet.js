@@ -109,9 +109,12 @@ MyApplet.prototype = {
 				this.menuManager.addMenu(this.menu);
 
 				this._display();
-                this.refresh_menu_item = new Applet.MenuItem(_("Refresh bookmarks..."), Gtk.STOCK_REFRESH,
+                this.refresh_menu_item = new Applet.MenuItem(_("Refresh bookmarks..."), 'view-refresh-symbolic',
                         Lang.bind(this, this._refresh));
                 this._applet_context_menu.addMenuItem(this.refresh_menu_item);
+                this.defaults_menu_item = new Applet.MenuItem(_("Change default programs..."), 'system-run-symbolic',
+                        Lang.bind(this, this._defaults));
+                this._applet_context_menu.addMenuItem(this.defaults_menu_item);
 			}
 			catch (e) {
 				global.logError(e);
@@ -122,6 +125,10 @@ MyApplet.prototype = {
             this.menu.removeAll();
             Main.placesManager._reloadBookmarks();
             this._display();
+        },
+
+        _defaults: function() {
+            Main.Util.spawnCommandLine("mate-default-applications-properties");
         },
 
 		on_applet_clicked: function(event) {    
