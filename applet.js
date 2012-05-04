@@ -10,6 +10,7 @@ const Lang = imports.lang;
 const Gettext = imports.gettext;
 const _ = Gettext.gettext;
 const Gtk = imports.gi.Gtk;
+const Util = imports.misc.util;
 
 let ICON_SIZE = 22;
 
@@ -128,7 +129,7 @@ MyApplet.prototype = {
         },
 
         _defaults: function() {
-            Main.Util.spawnCommandLine("mate-default-applications-properties");
+            Util.spawn(['gnome-control-center', 'info']);
         },
 
 		on_applet_clicked: function(event) {    
